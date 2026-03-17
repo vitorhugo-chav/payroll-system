@@ -13,27 +13,6 @@ Projeto universitário simples em Java para cálculo de folha de pagamento.
 - Java 21
 - Padrões: Strategy, Single Responsibility, Dependency Injection manual
 
-## Estrutura do projeto
-src
-└──com
-    └──payroll
-        ├──calculator
-        │   ├──InssCalculator.java
-        │   ├──IrrfCalculator.java
-        │   └──OvertimeCalculator.java
-        ├──Main.java
-        ├──model
-        │   ├──Employee.java
-        │   └──PayrollRecord.java
-        ├──service
-        │   └──PayrollService.java
-        ├──strategy
-        │   ├──Discount.java
-        │   └──InssDiscount.java
-        └──view
-            └──PayrollConsoleView.java
-
-
 ## Como executar
 
 ```bash
