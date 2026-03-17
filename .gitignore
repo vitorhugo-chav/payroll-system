@@ -1,0 +1,44 @@
+# Java compilados
+*.class
+*.jar
+*.war
+*.ear
+
+# Pastas de build / output
+target/
+bin/
+out/
+build/
+
+# IDEs e editores
+.idea/
+*.iml
+*.iws
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Arquivos temporários / backups
+*~
+*.bak
+*.swp
+*.tmp
+*.log
+
+# Maven / Gradle (caso venha a usar no futuro)
+.mvn/
+mvnw
+mvnw.cmd
+gradle/
+gradlew
+gradlew.bat
+
+# Outros arquivos pessoais que possam aparecer
+.classpath
+.project
+.settings/
