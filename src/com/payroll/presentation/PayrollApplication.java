@@ -1,22 +1,13 @@
 package com.payroll.presentation;
 
+import com.payroll.application.config.AppConfig;
 import com.payroll.application.dto.EmployeeResponse;
 import com.payroll.application.dto.PaySlipResponse;
 import com.payroll.application.dto.PayrollInput;
-import com.payroll.application.mapper.PayrollMapper;
 import com.payroll.application.usecase.ProcessPayrollUseCase;
-import com.payroll.application.usecase.ProcessPayrollUseCaseImpl;
-import com.payroll.calculator.InssCalculator;
-import com.payroll.calculator.IrrfCalculator;
-import com.payroll.calculator.OvertimeCalculator;
-import com.payroll.domain.port.EmployeeRepository;
 import com.payroll.infrastructure.input.ConsoleEmployeeInput;
-import com.payroll.infrastructure.mapper.PayrollMapperImpl;
-import com.payroll.infrastructure.persistence.InMemoryEmployeeRepository;
-import com.payroll.service.PayrollService;
-import com.payroll.strategy.Discount;
-import com.payroll.strategy.InssDiscount;
 import com.payroll.view.PayrollConsoleView;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 import java.util.Scanner;
@@ -24,10 +15,12 @@ import java.util.Scanner;
 public class PayrollApplication {
 
     public static void main(String[] args) {
-        try (Scanner scanner = new Scanner(System.in)) {
-            ProcessPayrollUseCase useCase = buildUseCase();
+        try (Scanner scanner = new Scanner(System.in);
+             AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class)) {
+
+            ProcessPayrollUseCase useCase = context.getBean(ProcessPayrollUseCase.class);
             ConsoleEmployeeInput input = new ConsoleEmployeeInput(scanner);
-            PayrollConsoleView view = new PayrollConsoleView();
+            PayrollConsoleView view = context.getBean(PayrollConsoleView.class);
 
             boolean running = true;
             while (running) {
@@ -57,18 +50,5 @@ public class PayrollApplication {
     private static void listEmployees(ProcessPayrollUseCase useCase, PayrollConsoleView view) {
         List<EmployeeResponse> employees = useCase.listEmployees();
         view.printEmployeeList(employees);
-    }
-
-    private static ProcessPayrollUseCase buildUseCase() {
-        InssCalculator inssCalc = new InssCalculator();
-        Discount inssDiscount = new InssDiscount(inssCalc);
-        OvertimeCalculator overtimeCalc = new OvertimeCalculator();
-        IrrfCalculator irrfCalc = new IrrfCalculator();
-
-        PayrollService payrollService = new PayrollService(overtimeCalc, inssDiscount, irrfCalc);
-        EmployeeRepository employeeRepository = new InMemoryEmployeeRepository();
-        PayrollMapper mapper = new PayrollMapperImpl();
-
-        return new ProcessPayrollUseCaseImpl(payrollService, employeeRepository, mapper);
     }
 }

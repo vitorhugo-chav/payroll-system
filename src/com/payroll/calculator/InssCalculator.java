@@ -1,7 +1,9 @@
 package com.payroll.calculator;
 
 import com.payroll.model.vo.Money;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InssCalculator {
 
     private static final double MAX_LIMIT = 8475.55;

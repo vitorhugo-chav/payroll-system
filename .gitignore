@@ -31,10 +31,10 @@ ehthumbs.db
 *.tmp
 *.log
 
-# Maven / Gradle (caso venha a usar no futuro)
+# Maven cache
 .mvn/
-mvnw
-mvnw.cmd
+
+# Gradle
 gradle/
 gradlew
 gradlew.bat

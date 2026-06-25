@@ -8,7 +8,9 @@ import com.payroll.model.Employee;
 import com.payroll.model.PayrollRecord;
 import com.payroll.model.vo.*;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PayrollMapperImpl implements PayrollMapper {
 
     @Override

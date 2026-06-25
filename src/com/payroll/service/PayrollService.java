@@ -6,7 +6,9 @@ import com.payroll.model.vo.Money;
 import com.payroll.strategy.Discount;
 import com.payroll.strategy.IrrfCalculation;
 import com.payroll.strategy.OvertimeCalculation;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PayrollService {
 
     private final OvertimeCalculation overtimeCalculation;

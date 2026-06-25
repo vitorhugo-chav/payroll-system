@@ -3,7 +3,9 @@ package com.payroll.view;
 import com.payroll.application.dto.EmployeeResponse;
 import com.payroll.application.dto.PaySlipResponse;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PayrollConsoleView {
 
     public void printPayStub(PaySlipResponse response) {

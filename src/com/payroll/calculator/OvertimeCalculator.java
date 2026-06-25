@@ -4,7 +4,9 @@ import com.payroll.model.Employee;
 import com.payroll.model.vo.Hours;
 import com.payroll.model.vo.Money;
 import com.payroll.strategy.OvertimeCalculation;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OvertimeCalculator implements OvertimeCalculation {
 
     private static final double OVERTIME_FACTOR = 1.5;
