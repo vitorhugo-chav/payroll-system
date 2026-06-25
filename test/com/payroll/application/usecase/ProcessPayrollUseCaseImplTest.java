@@ -1,7 +1,8 @@
 package com.payroll.application.usecase;
 
+import com.payroll.application.dto.EmployeeResponse;
+import com.payroll.application.dto.PaySlipResponse;
 import com.payroll.application.dto.PayrollInput;
-import com.payroll.application.dto.PayrollResponse;
 import com.payroll.application.mapper.PayrollMapper;
 import com.payroll.calculator.InssCalculator;
 import com.payroll.calculator.IrrfCalculator;
@@ -13,6 +14,7 @@ import com.payroll.service.PayrollService;
 import com.payroll.strategy.Discount;
 import com.payroll.strategy.InssDiscount;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProcessPayrollUseCaseImplTest {
@@ -34,7 +36,7 @@ class ProcessPayrollUseCaseImplTest {
     @Test
     void shouldExecuteUseCaseAndReturnResponse() {
         PayrollInput input = new PayrollInput("Ana", "Gerente", 220, 8000, 240, 1);
-        PayrollResponse response = useCase.execute(input);
+        PaySlipResponse response = useCase.execute(input);
 
         assertEquals("Ana", response.employeeName());
         assertEquals("Gerente", response.employeeRole());
@@ -42,7 +44,7 @@ class ProcessPayrollUseCaseImplTest {
     }
 
     @Test
-    void shouldSaveEmployeeInRepository() {
+    void shouldSaveAndListEmployees() {
         InMemoryEmployeeRepository repo = new InMemoryEmployeeRepository();
         InssCalculator inssCalc = new InssCalculator();
         Discount inssDiscount = new InssDiscount(inssCalc);
@@ -52,8 +54,11 @@ class ProcessPayrollUseCaseImplTest {
         ProcessPayrollUseCase useCaseWithRepo = new ProcessPayrollUseCaseImpl(payrollService, repo, mapper);
 
         useCaseWithRepo.execute(new PayrollInput("Carlos", "Dev", 220, 4000, 220, 0));
+        useCaseWithRepo.execute(new PayrollInput("Ana", "Gerente", 200, 6000, 200, 2));
 
-        assertEquals(1, repo.findAll().size());
-        assertEquals("Carlos", repo.findAll().get(0).personalInfo().name().value());
+        List<EmployeeResponse> employees = useCaseWithRepo.listEmployees();
+        assertEquals(2, employees.size());
+        assertEquals("Carlos", employees.get(0).name());
+        assertEquals("Ana", employees.get(1).name());
     }
 }
