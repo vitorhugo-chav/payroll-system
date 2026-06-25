@@ -1,25 +1,21 @@
 package com.payroll.calculator;
 
 import com.payroll.model.Employee;
+import com.payroll.model.vo.Hours;
+import com.payroll.model.vo.Money;
+import com.payroll.strategy.OvertimeCalculation;
 
-/**
- * Specialist class for overtime pay calculations.
- */
-public class OvertimeCalculator {
+public class OvertimeCalculator implements OvertimeCalculation {
 
     private static final double OVERTIME_FACTOR = 1.5;
 
-    /**
-     * Calculates overtime pay based on hours worked beyond the contract.
-     * @param employee The emplyee data.
-     * @return The total overtime value in currency.
-     */
-    public double calculate(Employee employee) {
-        if (employee.getActualWorkedHours() <= employee.getMonthlyContractHours()) {
-            return 0.0;
-        }
+    public Money calculate(Employee employee) {
+        Hours actual = employee.actualWorkedHours();
+        Hours contract = employee.contract().monthlyContractHours();
 
-        double extraHours = employee.getActualWorkedHours() - employee.getMonthlyContractHours();
-        return extraHours * employee.getHourlyRate() * OVERTIME_FACTOR;
+        if (!actual.isGreaterThan(contract)) return Money.ZERO;
+
+        double extraHours = actual.subtract(contract);
+        return employee.contract().hourlyRate().times(extraHours * OVERTIME_FACTOR);
     }
 }

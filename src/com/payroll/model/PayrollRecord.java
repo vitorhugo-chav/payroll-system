@@ -1,23 +1,18 @@
 package com.payroll.model;
 
-/**
- * A Data Transfer Object (DTO) that holds the final results of
- * payroll calculations. This avoids re-calculating values multiples times.
- */
-public class PayrollRecord {
-    
-    private final Employee employee;
-    private final double baseSalary;
-    private final double overtimeValue;
-    private final double grossSalary;
-    private final double inssDeduction;
-    private final double irrfDeduction;
-    private final double netSalary;
+import com.payroll.model.vo.Money;
 
-    /**
-     * Constructs an immutable record with all calculated values.
-     */
-    public PayrollRecord(Employee employee, double baseSalary, double overtimeValue, double grossSalary, double inssDeduction, double irrfDeduction, double netSalary) {
+public class PayrollRecord {
+
+    private final Employee employee;
+    private final Money baseSalary;
+    private final Money overtimeValue;
+    private final Money grossSalary;
+    private final Money inssDeduction;
+    private final Money irrfDeduction;
+    private final Money netSalary;
+
+    public PayrollRecord(Employee employee, Money baseSalary, Money overtimeValue, Money grossSalary, Money inssDeduction, Money irrfDeduction, Money netSalary) {
         this.employee = employee;
         this.baseSalary = baseSalary;
         this.overtimeValue = overtimeValue;
@@ -27,12 +22,11 @@ public class PayrollRecord {
         this.netSalary = netSalary;
     }
 
-    // Getters only - No logic allowed here!
-    public Employee getEmployee() { return employee; }
-    public double getBaseSalary() { return baseSalary; }
-    public double getOvertimeValue() { return overtimeValue; }
-    public double getGrossSalary() { return grossSalary; }
-    public double getInssDeduction() { return inssDeduction; }
-    public double getIrrfDeduction() { return irrfDeduction; }
-    public double getNetSalary() { return netSalary; }
+    public Employee employee() { return employee; }
+    public Money baseSalary() { return baseSalary; }
+    public Money overtimeValue() { return overtimeValue; }
+    public Money grossSalary() { return grossSalary; }
+    public Money inssDeduction() { return inssDeduction; }
+    public Money irrfDeduction() { return irrfDeduction; }
+    public Money netSalary() { return netSalary; }
 }

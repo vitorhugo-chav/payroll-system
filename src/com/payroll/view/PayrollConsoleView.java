@@ -3,36 +3,28 @@ package com.payroll.view;
 import com.payroll.model.Employee;
 import com.payroll.model.PayrollRecord;
 
-/**
- * Handles the display of payroll information to the console.
- * It has NO business logic, strictly adhering to the Single Responsibility Principle.
- */
 public class PayrollConsoleView {
-    
-    /**
-     * Prints the formatted pay stub to the standard output.
-     * @param record The pre-calculated payroll data (DTO)
-     */
+
     public void printPayStub(PayrollRecord record) {
-        Employee emp = record.getEmployee();
+        Employee emp = record.employee();
 
         System.out.println("\n========================================");
-        System.out.println("           PAYROLL PAY STUB             ");
+        System.out.println("           HOLERITE                     ");
         System.out.println("========================================");
-        System.out.printf("Employee:    %-25s%n", emp.getName());
-        System.out.printf("Role:        %-25s%n", emp.getRole());
+        System.out.printf("Funcionário: %-25s%n", emp.personalInfo().name().value());
+        System.out.printf("Cargo:       %-25s%n", emp.personalInfo().role().value());
         System.out.println("----------------------------------------");
-        
-        System.out.printf("(+) Base Salary:       R$ %10.2f%n", record.getBaseSalary());
-        System.out.printf("(+) Overtime (1.5x):   R$ %10.2f%n", record.getOvertimeValue());
+
+        System.out.printf("(+) Salário Base:      R$ %10.2f%n", record.baseSalary().value());
+        System.out.printf("(+) Hora Extra (1.5x): R$ %10.2f%n", record.overtimeValue().value());
         System.out.println("----------------------------------------");
-        
-        System.out.printf("    GROSS SALARY:      R$ %10.2f%n", record.getGrossSalary());
-        System.out.printf("(-) INSS Deduction:    R$ %10.2f%n", record.getInssDeduction());
-        System.out.printf("(-) IRRF Deduction:    R$ %10.2f%n", record.getIrrfDeduction());
+
+        System.out.printf("    SALÁRIO BRUTO:     R$ %10.2f%n", record.grossSalary().value());
+        System.out.printf("(-) INSS:              R$ %10.2f%n", record.inssDeduction().value());
+        System.out.printf("(-) IRRF:              R$ %10.2f%n", record.irrfDeduction().value());
         System.out.println("----------------------------------------");
-        
-        System.out.printf("(=) NET SALARY:        R$ %10.2f%n", record.getNetSalary());
+
+        System.out.printf("(=) SALÁRIO LÍQUIDO:   R$ %10.2f%n", record.netSalary().value());
         System.out.println("========================================\n");
     }
 }
