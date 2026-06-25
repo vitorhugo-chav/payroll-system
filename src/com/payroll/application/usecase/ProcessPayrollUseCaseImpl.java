@@ -9,7 +9,9 @@ import com.payroll.model.Employee;
 import com.payroll.model.PayrollRecord;
 import com.payroll.service.PayrollService;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ProcessPayrollUseCaseImpl implements ProcessPayrollUseCase {
 
     private final PayrollService payrollService;

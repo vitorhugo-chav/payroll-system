@@ -3,7 +3,9 @@ package com.payroll.calculator;
 import com.payroll.model.Employee;
 import com.payroll.model.vo.Money;
 import com.payroll.strategy.IrrfCalculation;
+import org.springframework.stereotype.Component;
 
+@Component
 public class IrrfCalculator implements IrrfCalculation {
 
     private static final double DEPENDENT_DEDUCTION = 189.59;

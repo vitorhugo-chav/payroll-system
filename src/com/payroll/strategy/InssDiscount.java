@@ -3,7 +3,9 @@ package com.payroll.strategy;
 import com.payroll.calculator.InssCalculator;
 import com.payroll.model.Employee;
 import com.payroll.model.vo.Money;
+import org.springframework.stereotype.Component;
 
+@Component
 public class InssDiscount implements Discount {
 
     private final InssCalculator calculator;
