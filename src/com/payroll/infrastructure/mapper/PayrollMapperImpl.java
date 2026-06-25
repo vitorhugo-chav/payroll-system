@@ -1,11 +1,13 @@
 package com.payroll.infrastructure.mapper;
 
+import com.payroll.application.dto.EmployeeResponse;
+import com.payroll.application.dto.PaySlipResponse;
 import com.payroll.application.dto.PayrollInput;
-import com.payroll.application.dto.PayrollResponse;
 import com.payroll.application.mapper.PayrollMapper;
 import com.payroll.model.Employee;
 import com.payroll.model.PayrollRecord;
 import com.payroll.model.vo.*;
+import java.util.List;
 
 public class PayrollMapperImpl implements PayrollMapper {
 
@@ -22,16 +24,31 @@ public class PayrollMapperImpl implements PayrollMapper {
     }
 
     @Override
-    public PayrollResponse toResponse(Employee employee, PayrollRecord record) {
-        return new PayrollResponse(
-            employee.personalInfo().name().value(),
-            employee.personalInfo().role().value(),
-            record.baseSalary().value(),
-            record.overtimeValue().value(),
-            record.grossSalary().value(),
-            record.inssDeduction().value(),
-            record.irrfDeduction().value(),
-            record.netSalary().value()
-        );
+    public PaySlipResponse toPaySlip(Employee employee, PayrollRecord record) {
+        return PaySlipResponse.builder()
+            .employeeName(employee.personalInfo().name().value())
+            .employeeRole(employee.personalInfo().role().value())
+            .baseSalary(record.baseSalary().value())
+            .overtimeValue(record.overtimeValue().value())
+            .grossSalary(record.grossSalary().value())
+            .inssDeduction(record.inssDeduction().value())
+            .irrfDeduction(record.irrfDeduction().value())
+            .netSalary(record.netSalary().value())
+            .build();
+    }
+
+    @Override
+    public EmployeeResponse toSummary(Employee employee) {
+        return EmployeeResponse.builder()
+            .name(employee.personalInfo().name().value())
+            .role(employee.personalInfo().role().value())
+            .build();
+    }
+
+    @Override
+    public List<EmployeeResponse> toSummaryList(List<Employee> employees) {
+        return employees.stream()
+            .map(this::toSummary)
+            .toList();
     }
 }

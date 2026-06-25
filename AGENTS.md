@@ -39,7 +39,8 @@ src/com/payroll/
 ├── application/                  # Application Layer — use cases, DTOs
 │   ├── dto/
 │   │   ├── PayrollInput.java
-│   │   └── PayrollResponse.java
+│   │   ├── PaySlipResponse.java          # Builder pattern
+│   │   └── EmployeeResponse.java          # Builder pattern
 │   ├── mapper/
 │   │   └── PayrollMapper.java             # Mapper interface
 │   └── usecase/
@@ -134,11 +135,12 @@ test/com/payroll/                 # Unit tests
 - **Single Responsibility** — each class has one job
 - **Value Objects** — primitives wrapped in domain-meaningful types
 - **Immutability** — `Employee` and `PayrollRecord` are immutable
-- **DTO Pattern** — `PayrollInput` / `PayrollResponse` shield domain from external layers
+- **DTO Pattern** — `PayrollInput` / `PaySlipResponse` / `EmployeeResponse` shield domain from external layers
+- **Builder Pattern** — fluent builders on `PaySlipResponse` and `EmployeeResponse`
 - **Mapper Pattern** — `PayrollMapper` interface (`application`) + `PayrollMapperImpl` (`infrastructure`)
 
 ## Notes
-- 23 unit tests covering calculators, service, use case, and mapper
+- 27 unit tests covering calculators, service, use case, and mapper
 - No linting/formatting tools configured
 - `.class` and `test-lib/` files are gitignored; compile fresh after changes
 - Java 21 required

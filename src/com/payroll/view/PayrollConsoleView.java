@@ -1,10 +1,12 @@
 package com.payroll.view;
 
-import com.payroll.application.dto.PayrollResponse;
+import com.payroll.application.dto.EmployeeResponse;
+import com.payroll.application.dto.PaySlipResponse;
+import java.util.List;
 
 public class PayrollConsoleView {
 
-    public void printPayStub(PayrollResponse response) {
+    public void printPayStub(PaySlipResponse response) {
         System.out.println("\n========================================");
         System.out.println("           HOLERITE                     ");
         System.out.println("========================================");
@@ -23,5 +25,26 @@ public class PayrollConsoleView {
 
         System.out.printf("(=) SALÁRIO LÍQUIDO:   R$ %10.2f%n", response.netSalary());
         System.out.println("========================================\n");
+    }
+
+    public void printEmployeeList(List<EmployeeResponse> employees) {
+        if (employees.isEmpty()) {
+            System.out.println("\nNenhum funcionário cadastrado.\n");
+            return;
+        }
+        System.out.println("\n=== Funcionários Cadastrados ===");
+        for (int i = 0; i < employees.size(); i++) {
+            EmployeeResponse emp = employees.get(i);
+            System.out.printf("%d. %-20s | %s%n", i + 1, emp.name(), emp.role());
+        }
+        System.out.println();
+    }
+
+    public void printMenu() {
+        System.out.println("=== Sistema de Folha de Pagamento ===");
+        System.out.println("1. Processar novo funcionário");
+        System.out.println("2. Listar funcionários");
+        System.out.println("3. Sair");
+        System.out.print("Escolha: ");
     }
 }
