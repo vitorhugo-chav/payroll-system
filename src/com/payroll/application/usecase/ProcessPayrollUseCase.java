@@ -1,8 +1,8 @@
 package com.payroll.application.usecase;
 
 import com.payroll.application.dto.PayrollInput;
-import com.payroll.model.PayrollRecord;
+import com.payroll.application.dto.PayrollResponse;
 
 public interface ProcessPayrollUseCase {
-    PayrollRecord execute(PayrollInput input);
+    PayrollResponse execute(PayrollInput input);
 }

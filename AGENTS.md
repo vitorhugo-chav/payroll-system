@@ -7,19 +7,30 @@ Simple Java 21 console application for payroll calculation. No build tool (Maven
 
 **Compile (with JDK):**
 ```bash
-javac -d . src/com/payroll/Main.java src/com/payroll/calculator/*.java src/com/payroll/model/*.java src/com/payroll/model/vo/*.java src/com/payroll/service/*.java src/com/payroll/strategy/*.java src/com/payroll/view/*.java src/com/payroll/domain/port/*.java src/com/payroll/application/dto/*.java src/com/payroll/application/usecase/*.java src/com/payroll/infrastructure/persistence/*.java src/com/payroll/infrastructure/input/*.java
+javac -d bin src/com/payroll/presentation/PayrollApplication.java src/com/payroll/calculator/*.java src/com/payroll/model/*.java src/com/payroll/model/vo/*.java src/com/payroll/service/*.java src/com/payroll/strategy/*.java src/com/payroll/view/*.java src/com/payroll/domain/port/*.java src/com/payroll/application/dto/*.java src/com/payroll/application/usecase/*.java src/com/payroll/infrastructure/persistence/*.java src/com/payroll/infrastructure/input/*.java
 ```
 
 **Run:**
 ```bash
-java com.payroll.Main
+java -cp bin com.payroll.presentation.PayrollApplication
+```
+
+**Compile tests:**
+```bash
+javac -cp "test-lib/junit-platform-console-standalone-1.11.0.jar:bin" -d bin test/com/payroll/calculator/*.java test/com/payroll/service/*.java test/com/payroll/application/usecase/*.java
+```
+
+**Run tests:**
+```bash
+java -cp "test-lib/junit-platform-console-standalone-1.11.0.jar:bin" org.junit.platform.console.ConsoleLauncher --scan-classpath
 ```
 
 ## Layers & Structure
 
 ```
 src/com/payroll/
-├── Main.java                     # Composition root (presentation layer)
+├── presentation/                 # Entry point (composition root)
+│   └── PayrollApplication.java
 
 ├── domain/                       # Domain Layer — business rules only
 │   └── port/
@@ -27,7 +38,8 @@ src/com/payroll/
 
 ├── application/                  # Application Layer — use cases, DTOs
 │   ├── dto/
-│   │   └── PayrollInput.java
+│   │   ├── PayrollInput.java
+│   │   └── PayrollResponse.java
 │   └── usecase/
 │       ├── ProcessPayrollUseCase.java      # Input port interface
 │       └── ProcessPayrollUseCaseImpl.java  # Use case implementation
@@ -64,8 +76,18 @@ src/com/payroll/
 │   ├── IrrfCalculation.java
 │   └── OvertimeCalculation.java
 
-└── view/                         # Presentation output
+└── view/                         # Presentation output (adapter)
     └── PayrollConsoleView.java
+
+test/com/payroll/                 # Unit tests
+├── calculator/
+│   ├── InssCalculatorTest.java
+│   ├── IrrfCalculatorTest.java
+│   └── OvertimeCalculatorTest.java
+├── service/
+│   └── PayrollServiceTest.java
+└── application/usecase/
+    └── ProcessPayrollUseCaseImplTest.java
 ```
 
 ## Architecture Diagram
@@ -73,11 +95,12 @@ src/com/payroll/
 ```
 ┌──────────────────────────────────────────────────────┐
 │  Presentation Layer                                  │
-│  Main.java  +  PayrollConsoleView                    │
+│  PayrollApplication.java  +  PayrollConsoleView      │
 │  (ConsoleEmployeeInput)                              │
 ├──────────────────────────────────────────────────────┤
 │  Application Layer                                   │
-│  ProcessPayrollUseCaseImpl                           │
+│  ProcessPayrollUseCaseImpl  ←→  PayrollInput         │
+│                              →  PayrollResponse      │
 │  ─── depends on ───> PayrollService + Repository     │
 ├──────────────────────────────────────────────────────┤
 │  Domain Layer                                        │
@@ -95,17 +118,20 @@ src/com/payroll/
 - **Application** → **Domain** (model, service) + **Domain Port** (repository interface)
 - **Infrastructure** implements **Domain Port** (repository)
 - **Domain** has zero dependencies on outside layers
+- **View** receives DTO (`PayrollResponse`), never touches domain entities
 
 ## Key Patterns
 - **Hexagonal Architecture** (ports & adapters)
 - **Strategy** for INSS discount (`Discount` interface)
-- **Manual Dependency Injection** in `Main.java`
+- **Manual Dependency Injection** in `PayrollApplication.java`
 - **Single Responsibility** — each class has one job
 - **Value Objects** — primitives wrapped in domain-meaningful types
 - **Immutability** — `Employee` and `PayrollRecord` are immutable
+- **DTO Pattern** — `PayrollInput` / `PayrollResponse` shield domain from external layers
 
 ## Notes
-- No tests exist in this project
+- 21 unit tests covering calculators, service, and use case
 - No linting/formatting tools configured
-- `.class` files are gitignored; compile fresh after changes
+- `.class` and `test-lib/` files are gitignored; compile fresh after changes
 - Java 21 required
+- JUnit 5.11 required for tests (in `test-lib/`)

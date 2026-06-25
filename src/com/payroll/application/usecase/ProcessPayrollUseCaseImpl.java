@@ -1,6 +1,7 @@
 package com.payroll.application.usecase;
 
 import com.payroll.application.dto.PayrollInput;
+import com.payroll.application.dto.PayrollResponse;
 import com.payroll.domain.port.EmployeeRepository;
 import com.payroll.model.Employee;
 import com.payroll.model.PayrollRecord;
@@ -18,7 +19,7 @@ public class ProcessPayrollUseCaseImpl implements ProcessPayrollUseCase {
     }
 
     @Override
-    public PayrollRecord execute(PayrollInput input) {
+    public PayrollResponse execute(PayrollInput input) {
         Employee employee = new Employee(
             new Name(input.name()),
             new Role(input.role()),
@@ -29,6 +30,17 @@ public class ProcessPayrollUseCaseImpl implements ProcessPayrollUseCase {
         );
 
         employeeRepository.save(employee);
-        return payrollService.process(employee);
+
+        PayrollRecord record = payrollService.process(employee);
+        return new PayrollResponse(
+            employee.personalInfo().name().value(),
+            employee.personalInfo().role().value(),
+            record.baseSalary().value(),
+            record.overtimeValue().value(),
+            record.grossSalary().value(),
+            record.inssDeduction().value(),
+            record.irrfDeduction().value(),
+            record.netSalary().value()
+        );
     }
 }
