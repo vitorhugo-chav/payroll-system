@@ -7,7 +7,7 @@ Simple Java 21 console application for payroll calculation. No build tool (Maven
 
 **Compile (with JDK):**
 ```bash
-javac -d bin src/com/payroll/presentation/PayrollApplication.java src/com/payroll/calculator/*.java src/com/payroll/model/*.java src/com/payroll/model/vo/*.java src/com/payroll/service/*.java src/com/payroll/strategy/*.java src/com/payroll/view/*.java src/com/payroll/domain/port/*.java src/com/payroll/application/dto/*.java src/com/payroll/application/usecase/*.java src/com/payroll/infrastructure/persistence/*.java src/com/payroll/infrastructure/input/*.java
+javac -d bin src/com/payroll/presentation/PayrollApplication.java src/com/payroll/calculator/*.java src/com/payroll/model/*.java src/com/payroll/model/vo/*.java src/com/payroll/service/*.java src/com/payroll/strategy/*.java src/com/payroll/view/*.java src/com/payroll/domain/port/*.java src/com/payroll/application/dto/*.java src/com/payroll/application/usecase/*.java src/com/payroll/application/mapper/*.java src/com/payroll/infrastructure/persistence/*.java src/com/payroll/infrastructure/input/*.java src/com/payroll/infrastructure/mapper/*.java
 ```
 
 **Run:**
@@ -17,7 +17,7 @@ java -cp bin com.payroll.presentation.PayrollApplication
 
 **Compile tests:**
 ```bash
-javac -cp "test-lib/junit-platform-console-standalone-1.11.0.jar:bin" -d bin test/com/payroll/calculator/*.java test/com/payroll/service/*.java test/com/payroll/application/usecase/*.java
+javac -cp "test-lib/junit-platform-console-standalone-1.11.0.jar:bin" -d bin test/com/payroll/calculator/*.java test/com/payroll/service/*.java test/com/payroll/application/usecase/*.java test/com/payroll/infrastructure/mapper/*.java
 ```
 
 **Run tests:**
@@ -40,6 +40,8 @@ src/com/payroll/
 │   ├── dto/
 │   │   ├── PayrollInput.java
 │   │   └── PayrollResponse.java
+│   ├── mapper/
+│   │   └── PayrollMapper.java             # Mapper interface
 │   └── usecase/
 │       ├── ProcessPayrollUseCase.java      # Input port interface
 │       └── ProcessPayrollUseCaseImpl.java  # Use case implementation
@@ -47,6 +49,8 @@ src/com/payroll/
 ├── infrastructure/               # Infrastructure Layer — adapters
 │   ├── input/
 │   │   └── ConsoleEmployeeInput.java      # Reads console input
+│   ├── mapper/
+│   │   └── PayrollMapperImpl.java         # Mapper implementation
 │   └── persistence/
 │       └── InMemoryEmployeeRepository.java # In-memory repo
 
@@ -86,8 +90,10 @@ test/com/payroll/                 # Unit tests
 │   └── OvertimeCalculatorTest.java
 ├── service/
 │   └── PayrollServiceTest.java
-└── application/usecase/
-    └── ProcessPayrollUseCaseImplTest.java
+├── application/usecase/
+│   └── ProcessPayrollUseCaseImplTest.java
+└── infrastructure/mapper/
+    └── PayrollMapperImplTest.java
 ```
 
 ## Architecture Diagram
@@ -102,6 +108,7 @@ test/com/payroll/                 # Unit tests
 │  ProcessPayrollUseCaseImpl  ←→  PayrollInput         │
 │                              →  PayrollResponse      │
 │  ─── depends on ───> PayrollService + Repository     │
+│  ─── uses ───> PayrollMapper                        │
 ├──────────────────────────────────────────────────────┤
 │  Domain Layer                                        │
 │  Model / VOs / Service / Strategy / Calculator       │
@@ -128,9 +135,10 @@ test/com/payroll/                 # Unit tests
 - **Value Objects** — primitives wrapped in domain-meaningful types
 - **Immutability** — `Employee` and `PayrollRecord` are immutable
 - **DTO Pattern** — `PayrollInput` / `PayrollResponse` shield domain from external layers
+- **Mapper Pattern** — `PayrollMapper` interface (`application`) + `PayrollMapperImpl` (`infrastructure`)
 
 ## Notes
-- 21 unit tests covering calculators, service, and use case
+- 23 unit tests covering calculators, service, use case, and mapper
 - No linting/formatting tools configured
 - `.class` and `test-lib/` files are gitignored; compile fresh after changes
 - Java 21 required

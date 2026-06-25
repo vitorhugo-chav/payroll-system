@@ -2,6 +2,7 @@ package com.payroll.presentation;
 
 import com.payroll.application.dto.PayrollInput;
 import com.payroll.application.dto.PayrollResponse;
+import com.payroll.application.mapper.PayrollMapper;
 import com.payroll.application.usecase.ProcessPayrollUseCase;
 import com.payroll.application.usecase.ProcessPayrollUseCaseImpl;
 import com.payroll.calculator.InssCalculator;
@@ -9,6 +10,7 @@ import com.payroll.calculator.IrrfCalculator;
 import com.payroll.calculator.OvertimeCalculator;
 import com.payroll.domain.port.EmployeeRepository;
 import com.payroll.infrastructure.input.ConsoleEmployeeInput;
+import com.payroll.infrastructure.mapper.PayrollMapperImpl;
 import com.payroll.infrastructure.persistence.InMemoryEmployeeRepository;
 import com.payroll.service.PayrollService;
 import com.payroll.strategy.Discount;
@@ -44,7 +46,8 @@ public class PayrollApplication {
 
         PayrollService payrollService = new PayrollService(overtimeCalc, inssDiscount, irrfCalc);
         EmployeeRepository employeeRepository = new InMemoryEmployeeRepository();
+        PayrollMapper mapper = new PayrollMapperImpl();
 
-        return new ProcessPayrollUseCaseImpl(payrollService, employeeRepository);
+        return new ProcessPayrollUseCaseImpl(payrollService, employeeRepository, mapper);
     }
 }
