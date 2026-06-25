@@ -2,12 +2,13 @@ package com.payroll.application.usecase;
 
 import com.payroll.application.dto.PayrollInput;
 import com.payroll.application.dto.PayrollResponse;
+import com.payroll.application.mapper.PayrollMapper;
 import com.payroll.calculator.InssCalculator;
 import com.payroll.calculator.IrrfCalculator;
 import com.payroll.calculator.OvertimeCalculator;
 import com.payroll.domain.port.EmployeeRepository;
+import com.payroll.infrastructure.mapper.PayrollMapperImpl;
 import com.payroll.infrastructure.persistence.InMemoryEmployeeRepository;
-import com.payroll.model.Employee;
 import com.payroll.service.PayrollService;
 import com.payroll.strategy.Discount;
 import com.payroll.strategy.InssDiscount;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProcessPayrollUseCaseImplTest {
 
     private final ProcessPayrollUseCase useCase;
+    private final PayrollMapper mapper;
 
     ProcessPayrollUseCaseImplTest() {
         InssCalculator inssCalc = new InssCalculator();
@@ -25,7 +27,8 @@ class ProcessPayrollUseCaseImplTest {
         IrrfCalculator irrfCalc = new IrrfCalculator();
         PayrollService payrollService = new PayrollService(overtimeCalc, inssDiscount, irrfCalc);
         EmployeeRepository repository = new InMemoryEmployeeRepository();
-        useCase = new ProcessPayrollUseCaseImpl(payrollService, repository);
+        mapper = new PayrollMapperImpl();
+        useCase = new ProcessPayrollUseCaseImpl(payrollService, repository, mapper);
     }
 
     @Test
@@ -46,7 +49,7 @@ class ProcessPayrollUseCaseImplTest {
         OvertimeCalculator overtimeCalc = new OvertimeCalculator();
         IrrfCalculator irrfCalc = new IrrfCalculator();
         PayrollService payrollService = new PayrollService(overtimeCalc, inssDiscount, irrfCalc);
-        ProcessPayrollUseCase useCaseWithRepo = new ProcessPayrollUseCaseImpl(payrollService, repo);
+        ProcessPayrollUseCase useCaseWithRepo = new ProcessPayrollUseCaseImpl(payrollService, repo, mapper);
 
         useCaseWithRepo.execute(new PayrollInput("Carlos", "Dev", 220, 4000, 220, 0));
 
