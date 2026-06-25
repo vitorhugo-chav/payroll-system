@@ -1,6 +1,7 @@
-package com.payroll;
+package com.payroll.presentation;
 
 import com.payroll.application.dto.PayrollInput;
+import com.payroll.application.dto.PayrollResponse;
 import com.payroll.application.usecase.ProcessPayrollUseCase;
 import com.payroll.application.usecase.ProcessPayrollUseCaseImpl;
 import com.payroll.calculator.InssCalculator;
@@ -9,7 +10,6 @@ import com.payroll.calculator.OvertimeCalculator;
 import com.payroll.domain.port.EmployeeRepository;
 import com.payroll.infrastructure.input.ConsoleEmployeeInput;
 import com.payroll.infrastructure.persistence.InMemoryEmployeeRepository;
-import com.payroll.model.PayrollRecord;
 import com.payroll.service.PayrollService;
 import com.payroll.strategy.Discount;
 import com.payroll.strategy.InssDiscount;
@@ -17,7 +17,7 @@ import com.payroll.view.PayrollConsoleView;
 
 import java.util.Scanner;
 
-public class Main {
+public class PayrollApplication {
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
@@ -26,8 +26,8 @@ public class Main {
             PayrollConsoleView view = new PayrollConsoleView();
 
             PayrollInput data = input.read();
-            PayrollRecord record = useCase.execute(data);
-            view.printPayStub(record);
+            PayrollResponse response = useCase.execute(data);
+            view.printPayStub(response);
 
         } catch (IllegalArgumentException e) {
             System.err.println("\nErro de Validação: " + e.getMessage());
